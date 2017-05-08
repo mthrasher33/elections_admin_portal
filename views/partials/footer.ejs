@@ -1,0 +1,10 @@
+<div id="footer">
+    <div class="container">
+	    <%if (!isLoggedIn) { %>
+      		<p class="footer-block"><a class="pull-right" href="/login">Login</a></p>
+      	<%}else{ %>
+      		<p class="footer-block"><a class="pull-right" href="/logout">Logout</a></p>
+    	<%} %>
+
+    </div>
+</div>

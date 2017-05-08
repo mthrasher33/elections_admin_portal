@@ -1,0 +1,100 @@
+<!-- views/index.ejs -->
+<!doctype html>
+<html>
+<head>
+    <% include ../views/partials/head %>
+</head>
+<body>
+    <% include ../views/partials/header %>
+    <div class="container">
+        <div class="row">
+	        <div class="jumbotron text-center">
+	            <h1>Welcome to the Administrator Dashboard</h1>
+	        </div>
+        </div>
+        <div class="row">
+        	<div class="col-xs-2 rightborder">
+        		<ul id="submenu" class="submenu">
+        			<li class="active" id="candidates">Candidates</li>
+        			<li id="committees">Committees</li>
+        			<li id="reports">Reports</li>
+        			<li id ="donations">Donations</li>
+        		</ul>
+        	</div>
+        	<div class="col-xs-10">
+
+        		<div id="submenuContent">
+        			<% if (menu === 'candidates') { %> 
+        				<% include ../views/partials/dashboard/candidates } %>
+        			<% } %>
+        			<% if (menu === 'committees') { %> 
+        				<% include ../views/partials/dashboard/committees } %>
+        			<% } %>
+        			<% if (menu === 'reports') { %> 
+        				<% include ../views/partials/dashboard/reports } %>
+        			<% } %>
+        			<% if (menu === 'donations') { %> 
+        				<% include ../views/partials/dashboard/donations } %>
+        			<% } %>        			
+        		</div>
+
+        	</div>
+        </div>
+
+    </div>
+
+    <% include ../views/partials/footer %>
+</body>
+</html>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script>
+	
+	setActiveMenu();
+
+    var submenuContent = $('#sumenuContent'); 
+
+    $('ul#submenu li').click(function() {
+    	var clicked = event.target.id;
+    	//alert(clicked);
+    	//remove the active class
+       $('ul#submenu li.active').removeClass('active');
+
+       //add the active class to the new menu
+       $(this).addClass('active');
+
+       	var url = $(location).attr('href');
+       	var params = {
+			menu: clicked,
+			option: 'view'
+		}
+		
+		var str = jQuery.param(params);
+			
+		//if there are no parameters, add them
+		if (url.indexOf('/') > 5){
+		 window.history.pushState("", "", url.replace(/\?.*$/, "") + "?" + jQuery.param(params))
+		} else {  //remove the existing params and add the new ones
+		 window.history.pushState("", "", url.slice(0, url.indexOf('/')) + "?" +  jQuery.param(params))
+		}
+
+
+		$.get("/"+ clicked + '?option=view', function(data){	       
+	    	if(data){
+				$('#submenuContent').html(data);
+	       	}
+	  	});
+    });
+
+    function setActiveMenu () {
+    	var urlParams = new URLSearchParams(window.location.search);
+    	var entries = urlParams.entries();
+		for(pair of entries) { 
+			if(pair[0]==='menu'){
+  				var submenuID = pair[1];
+  			} 
+		}
+		$('ul#submenu li.active').removeClass('active');
+		     $('#' + submenuID).addClass('active');
+    }
+</script>
