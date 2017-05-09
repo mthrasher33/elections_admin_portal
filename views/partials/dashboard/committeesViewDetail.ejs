@@ -1,0 +1,27 @@
+<div class="col-xs-12">
+<% if (data.length < 1) { %>
+   <p> We do not have a registered campaign committee for this candidate in our database.</p>
+   <ul> Here are the possibilities:
+      <li> We have not yet entered the committee from the <a href= "http://www16.co.hennepin.mn.us/cfrs/search.do">county website</a> into our database. </li>
+      <li> We have looked on the county website, and the it does not list a committee for this candidate either because they did not raise more than $100 or they did not register. </li>
+   </ul>
+<% } %>
+
+<% for(var i=0; i < data.length; i++) { %>
+   <h3> <%=data[i].Committee_Name %> </h3>
+   <p> Year registered: <%=data[i].Registration_Date_Year %> </p>
+    <% if ( data[i].Termination_Date_Year > 0) { %>
+      <p> Year closed: <%=data[i].Termination_Date_Year%> </p>
+   <% } else { %>
+            <p> Year closed: still active </p>
+
+   <% } %>
+
+   <p> Location: <%=data[i].Location %></p>
+   <p> Office: <%=data[i].Office %></p>
+   <p> Disctrict Number: <%=data[i].District_Num %></p>        
+<% } %>
+
+
+
+</div>

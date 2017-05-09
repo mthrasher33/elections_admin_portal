@@ -196,13 +196,14 @@ module.exports = function(app, passport) {
 		var data;
 		var query=req.query;
 		//console.log('get committees!');
-		datalayer.committeesView(function(err, rows, fields){
+		datalayer.candidatesView(function(err, rows, fields){
 			if(!err){
-			res.render('partials/dashboard/committees', {layout:false, data:rows, option: req.query.option});
+				res.render('partials/dashboard/committees', {layout:false, data:rows, option: req.query.option, detail: req.query.detail});
 			} else {
 				console.log(err);
 			}
 		});
+
 	})
 
 	app.get('/committeescreate', isLoggedIn, function(req, res){
@@ -219,9 +220,26 @@ module.exports = function(app, passport) {
 	app.get('/committeesView', isLoggedIn, function(req, res){
 		var data;
 		var query=req.query.detail;
-		console.log(query);
-		res.render('partials/dashboard/committeesView', {layout:false, data:data});
-	})	
+		datalayer.candidatesView(function(err, rows, fields){
+			if(!err){
+				res.render('partials/dashboard/committeesView', {layout:false, data:rows, option: req.query.option, detail: req.query.detail});
+			} else {
+				console.log(err);
+			}
+		});
+	})
+	app.get('/committeesViewDetail', isLoggedIn, function(req, res){
+		datalayer.committeesViewDetail(req.query.detail, function(err, rows, fields){
+			if(!err){
+				var query=req.query.detail; 
+				res.render('partials/dashboard/committeesViewDetail', {layout:false, data:rows, option:req.query.detail});
+				console.log(rows.length);
+			} else {
+				console.log('Error while performing Query ' + err);
+			}
+		});
+	})
+
 
 	app.get('/candidates', isLoggedIn, function(req, res){
 		var data;
