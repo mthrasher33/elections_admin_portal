@@ -20,7 +20,7 @@
       <p> Campaign Finance Report: <a href="<%=data[i].Link %>" target="_blank"> County Site</a></p>
       <p> Machine Readable File: 
            <% if ( data[i].Machine_Readable_File_System) { %>
-            <span class="obtained"><a href="/public/reports/<%=data[i].Machine_Readable_File_System %>" download> County Site</a> </span> 
+            <span class="obtained"><a href="../reports/<%=data[i].Machine_Readable_File_System %>" download> Download</a> </span> 
             <% } else { %>
             <span class="missing"> Missing </span>
 

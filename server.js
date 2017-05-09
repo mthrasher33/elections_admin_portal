@@ -45,9 +45,11 @@ app.use(flash()); // use connect-flash for flash messages stored in session
 
 //make paths intuitive
 app.set('views', path.join(__dirname, 'views'));
-app.use(require('stylus').middleware(path.join(__dirname, 'public')));
 
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, '/public')));
+app.use(require('stylus').middleware(path.join(__dirname, '/public')));
+
+//app.use("/public", express.static(__dirname + '/public'));
 
 // routes ======================================================================
 require('./app/routes.js')(app, passport); // load our routes and pass in our app and fully configured passport
