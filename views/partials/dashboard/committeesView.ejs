@@ -1,0 +1,7 @@
+<select class = "form-control" id="candidates">
+   <option value = "-1">--Select Committee--</option>
+<% for(var i=0; i < committees.length; i++) { %>
+   <option value = "<%= committees[i].idCommittee%> "> <%= committees[i].Committee_Name%>
+   </option>
+<% } %>
+</select>

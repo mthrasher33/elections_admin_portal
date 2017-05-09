@@ -1,12 +1,8 @@
+<h1>Donations View</h1>
 <select class = "form-control" id="candidates">
-   <option value = "-1">--Select Candidate--</option>
+   <option value = "-1">--Select--</option>
 <% for(var i=0; i < data.length; i++) { %>
    <option value = "<%= data[i].idCandidate%> "> <%= data[i].Last %>, <%= data[i].First %>
    </option>
 <% } %>
 </select>
-
-
-<script>
-
-</script>

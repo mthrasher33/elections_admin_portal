@@ -26,7 +26,7 @@ module.exports = function(app, passport) {
 	// process the login form
 	app.post('/login', passport.authenticate('local-login', {
          
-            successRedirect : '/dashboard?menu=candidates', // redirect to the secure dashboard
+            successRedirect : '/dashboard?menu=candidates&option=view', // redirect to the secure dashboard
             failureRedirect : '/login', // redirect back to the signup page if there is an error
             failureFlash : true // allow flash messages
 		}),
@@ -83,12 +83,12 @@ module.exports = function(app, passport) {
 		var query = req.query.menu;
 		console.log(query);
 
-		if (!query){
-			res.redirect('/dashboard/?menu=candidates&option=view');
-		}
+		//if (!query){
+		//	res.redirect('/dashboard/?menu=candidates&option=view');
+		//}
 		var isLoggedIn = false;
 		if (req.isAuthenticated()){isLoggedIn = true};
-		 datalayer.getDashboard(function(err, rows, fields){
+		 datalayer.candidatesView(function(err, rows, fields){
 	        if(!err){
 	        	//if (!query.menu){
 			        res.render('dashboard.ejs',{
@@ -115,20 +115,48 @@ module.exports = function(app, passport) {
 	app.get('/committees', isLoggedIn, function(req, res){
 		var data;
 		var query=req.query;
-		console.log(query);
-		//if(!query){
-		//	res.redirect('/dashboard/committees/?option=view')
-		//}
-		//so it finds the view when you do this
-		res.render('partials/dashboard/committees', {layout:false, data:data});
+		//console.log('get committees!');
+		datalayer.committeesView(function(err, rows, fields){
+			if(!err){
+			res.render('partials/dashboard/committees', {layout:false, committees:rows, option: req.query.option});
+			} else {
+				console.log(err);
+			}
+		});
 	})
+
+	app.get('/committeescreate', isLoggedIn, function(req, res){
+		var data;
+		var query=req.query;
+		console.log(query);
+		res.render('partials/dashboard/committeesCreate', {layout:false, data:data});
+	})
+	app.get('/committeesEdit', isLoggedIn, function(req, res){
+		var data;
+		var query=req.query;
+		res.render('partials/dashboard/committeesEdit', {layout:false, data:data});
+	})
+	app.get('/committeesView', isLoggedIn, function(req, res){
+		var data;
+		var query=req.query;
+		console.log(query);
+		res.render('partials/dashboard/committeesView', {layout:false, data:data});
+	})	
 
 	app.get('/candidates', isLoggedIn, function(req, res){
 		var data;
 		var query=req.query;
 		console.log(query);
+		//console.log(query);
 		//so it finds the view when you do this
-		res.render('partials/dashboard/candidates', {layout:false, data:data, option: req.query.option});
+		datalayer.candidatesView(function(err, rows, fields){
+			if(!err){
+				res.render('partials/dashboard/candidates', {layout:false, data:rows, option: req.query.option});
+			} else {
+				console.log(err);
+			}
+		});
+
 	})
 
 	app.get('/candidatesedit', isLoggedIn, function(req,res){
@@ -140,7 +168,15 @@ module.exports = function(app, passport) {
 	app.get('/candidatesview', isLoggedIn, function(req,res){
 		var data;
 		var query=req.query.option;
-		res.render('partials/dashboard/candidatesView', {layout:false, data:data, option:req.query.option});
+		datalayer.candidatesView(function(err, rows, fields){
+	        if(!err){
+				res.render('partials/dashboard/candidatesView', {layout:false, data:rows, option:req.query.option});
+	        } else {
+	            console.log('Error while performing Query: ' + err);
+	        }
+		 console.log(rows);
+	    })
+		//res.render('partials/dashboard/candidatesView', {layout:false, data:data, option:req.query.option});
 	})
 
 	app.get('/candidatescreate', isLoggedIn, function(req,res){
