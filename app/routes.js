@@ -96,7 +96,8 @@ module.exports = function(app, passport) {
 						isLoggedIn: isLoggedIn, //get the user out of the session and pass to template
 						data: rows,
 						menu: req.query.menu,
-						option: req.query.option
+						option: req.query.option,
+						detail: ''
 					});
 		   		 //} else {
 		   		 //	res.redirect('/dashboard/?' + req.query.menu);
@@ -138,7 +139,7 @@ module.exports = function(app, passport) {
 	})
 	app.get('/committeesView', isLoggedIn, function(req, res){
 		var data;
-		var query=req.query;
+		var query=req.query.detail;
 		console.log(query);
 		res.render('partials/dashboard/committeesView', {layout:false, data:data});
 	})	
@@ -151,7 +152,7 @@ module.exports = function(app, passport) {
 		//so it finds the view when you do this
 		datalayer.candidatesView(function(err, rows, fields){
 			if(!err){
-				res.render('partials/dashboard/candidates', {layout:false, data:rows, option: req.query.option});
+				res.render('partials/dashboard/candidates', {layout:false, data:rows, option: req.query.option, detail: req.query.detail});
 			} else {
 				console.log(err);
 			}
@@ -170,13 +171,25 @@ module.exports = function(app, passport) {
 		var query=req.query.option;
 		datalayer.candidatesView(function(err, rows, fields){
 	        if(!err){
-				res.render('partials/dashboard/candidatesView', {layout:false, data:rows, option:req.query.option});
+				res.render('partials/dashboard/candidatesView', {layout:false, data:rows, option:req.query.option, detail: req.query.detail});
 	        } else {
 	            console.log('Error while performing Query: ' + err);
 	        }
 		 console.log(rows);
 	    })
 		//res.render('partials/dashboard/candidatesView', {layout:false, data:data, option:req.query.option});
+	})
+
+	app.get('/candidatesViewDetail', isLoggedIn, function(req, res){
+		datalayer.candidatesViewDetail(req.query.detail, function(err, rows, fields){
+			if(!err){
+			var query=req.query.detail;
+			res.render('partials/dashboard/candidatesViewDetail', {layout:false, data:rows, option:req.query.detail});
+			console.log(rows);
+			} else {
+				console.log('Error while performing Query ' + err);
+			}
+		});
 	})
 
 	app.get('/candidatescreate', isLoggedIn, function(req,res){

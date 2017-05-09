@@ -1,0 +1,13 @@
+<p>Races: 
+<% for(var i=0; i < data[0].length; i++) { %>
+   <span> <%= data[0][i].Date %> <%= data[0][i].Name%> </span>
+   <% if(data[0][i].City) { %>
+   	 <span>  <%= data[0][i].City %> </span>
+   <% } else { %>
+   	 <span>  <%= data[0][i].Ward_Name %> </span>
+   <% } %>
+<% } %>
+</p>
+
+<script>
+</script>

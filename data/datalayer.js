@@ -21,9 +21,9 @@
         });        
     }
 
-    this.candidatesViewDetail = function(callback){
+    this.candidatesViewDetail = function(idCandidate, callback){
        pool.getConnection(function(err,connection){
-            connection.query('Select Extract(YEAR From Date) As Year, idElection from Elections Order by Year Desc;', function(err, rows, fields){
+            connection.query('call spCandidateView(?)', idCandidate,  function(err, rows, fields){
                 connection.release();
                 callback(err,rows,fields);
             });
