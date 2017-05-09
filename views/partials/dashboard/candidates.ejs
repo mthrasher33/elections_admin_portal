@@ -34,6 +34,9 @@
 			menu: 'candidates',
 			option: clicked
 		}
+
+		$('button.btn.btn-lg').removeClass('active')
+		$(this).addClass('active');
 		
 		var str = jQuery.param(params);
 			

@@ -1,0 +1,81 @@
+<h3> <%=data[0][0].First %> <%=data[0][0].Last%> </h3>
+
+<p>Races: 
+   <ul>
+<% for(var i=0; i < data[0].length; i++) { %>
+   <li><span> <%= data[0][i].Date %> <%= data[0][i].Name%> </span>
+   <% if(data[0][i].City) { %>
+       <span>  <%= data[0][i].City %> </span>
+   <% } else { %>
+       <span>  <%= data[0][i].Ward_Name %> </span>
+   <% } %>
+      <% if(data[0][i].wonRace) { %>
+       <span>  (Won) </span>
+   <% } else { %>
+       <span>  (Lost) </span>
+   <% } %>
+   </li>
+<% } %>
+   </ul>
+</p>
+
+<form action="/candidatesEditDetails"  method="POST" role="form" onsumbit = "success()">
+  <div class="col-xs-12 col-sm-4">
+     <div class="form-group">
+       <label for="inputphone">Phone</label>
+       <input type="text" class="bfh-phone form-control" data-country="US" id="inputphone" name="phone" value="<%=data[0][0].Phone %>">
+     </div>
+  </div>
+  <div class="col-xs-12 col-sm-4">  
+     <div class="form-group">
+       <label for="inputfax">Fax</label>
+       <input type="text" class="bfh-phone form-control" data-country="US" id="inputFax" name="fax" value="<%=data[0][0].Fax %>">
+     </div>
+   </div>
+  <div class="col-xs-12 col-sm-4">
+      <div class="form-group">
+       <label for="input">Email address</label>
+       <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" name="email" value="<%=data[0][0].Email %>">
+     </div>
+   </div>  
+  <div class="col-xs-12 col-sm-6">
+   <div class="form-group">
+      <label for="inputwebsite">Website</label>
+       <input type="text" class="form-control"  id="inputWebsite" name="website" value="<%=data[0][0].Website %>">
+     </div>  
+   </div>  
+  <div class="col-xs-12 col-sm-6"> 
+     <div class="form-group">
+       <label for="inputyoutube">Youtube</label>
+       <input type="text" class="form-control"  id="inputyoutube"  name="youtube" value="<%=data[0][0].Youtube %>">
+     </div>
+  </div>
+  <div class="col-xs-12 col-sm-4">  
+     <div class="form-group">
+       <label for="inputfacebook">Facebook</label>
+       <input type="text" class="form-control"  id="intputfacebook" name="facebook" value="<%=data[0][0].Facebook %>">
+     </div>  
+  </div>
+  <div class="col-xs-12 col-sm-4">
+     <div class="form-group">
+       <label for="inputtwitter">Twitter</label>
+       <input type="text" class="form-control" id="inputtwitter" name="twitter_handle" value="<%=data[0][0].Twitter_Handle %>">
+     </div>
+  </div>
+  <div class="col-xs-12 col-sm-4">
+     <div class="form-group">
+       <label for="inputlinkedin">LinkedIn</label>
+       <input type="text" class="form-control" id="inputtwitter" name="linkedin" value="<%=data[0][0].linkedIn %>">
+     </div>
+  </div>
+  <input type="hidden" id="inputcandidateid" name="candidateid" value="<%=data[0][0].idCandidate %>">
+  
+  <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+
+
+<script>
+   function success(){
+      alert('Update successful!');
+   }
+</script>

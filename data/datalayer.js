@@ -30,6 +30,15 @@
         });          
     }
 
+    this.updateCandidate = function(phone, fax, email, website, youtube, facebook, twitter, linkedin, candidateid, callback){
+        pool.getConnection(function(err,connection){
+             connection.query('call spUpdateCandidate(?,?,?,?,?,?,?,?,?)', [phone, fax, email, website, youtube, facebook, twitter, linkedin, candidateid],  function(err, rows, fields){
+                 connection.release();
+                 callback(err, rows,fields);
+             });
+         });           
+    }
+
     this.committeesView = function(callback){
        pool.getConnection(function(err,connection){
             connection.query('Select c.Committee_Name, c.idCommittee from Committees c Order By c.Committee_Name', function(err, rows, fields){

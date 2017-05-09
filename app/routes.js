@@ -80,35 +80,114 @@ module.exports = function(app, passport) {
 
 	// ADMIN DASHBOARD 
 	app.get('/dashboard', isLoggedIn, function(req,res){
-		var query = req.query.menu;
-		console.log(query);
+		var menu = req.query.menu ? req.query.menu : '';
+		var option = req.query.option ? req.query.option : '';
+		var detail = req.query.detail ? req.query.detail : 0;
 
-		//if (!query){
-		//	res.redirect('/dashboard/?menu=candidates&option=view');
-		//}
+		// console.log('menu:');
+		// console.log(menu);
+
+		// console.log('option:');
+		// console.log(option);
+		// console.log('detail:');
+		// console.log(detail);
+
 		var isLoggedIn = false;
 		if (req.isAuthenticated()){isLoggedIn = true};
-		 datalayer.candidatesView(function(err, rows, fields){
-	        if(!err){
-	        	//if (!query.menu){
-			        res.render('dashboard.ejs',{
-						user: req.user,
-						isLoggedIn: isLoggedIn, //get the user out of the session and pass to template
-						data: rows,
-						menu: req.query.menu,
-						option: req.query.option,
-						detail: ''
+			
+			if(menu === 'candidates'){
+				if(detail > 0){
+					datalayer.candidatesViewDetail(detail, function(err, rows, fields){
+				        if(!err){
+						    res.render('dashboard.ejs',{
+								user: req.user,
+								isLoggedIn: isLoggedIn, 
+								data: rows,
+								menu: menu,
+								option: option,
+								detail: detail
+							});
+							console.log(data);
+		        		} else {
+		            		console.log('Error while performing Query: ' + err);
+		        		}
+		    		})
+		    	} else {
+		    		datalayer.candidatesView( function(err, rows, fields){
+						if(!err){
+						var query=req.query.detail;
+						res.render('dashboard.ejs',{
+								user: req.user,
+								isLoggedIn: isLoggedIn,
+								data: rows,
+								menu: menu,
+								option: option,
+								detail: detail
+							});
+						} else {
+							console.log('Error while performing Query ' + err);
+						}
 					});
-		   		 //} else {
-		   		 //	res.redirect('/dashboard/?' + req.query.menu);
-		   		// }
+		    	}
+			} else if (menu==='committees'){
+				if(detail > 0){
+					datalayer.committeesViewDetail(function(err, rows, fields){
+				        if(!err){
+						    res.render('dashboard.ejs',{
+								user: req.user,
+								isLoggedIn: isLoggedIn, 
+								data: rows,
+								menu: menu,
+								option: option,
+								detail: detail
+							});
+		        		} else {
+		            		console.log('Error while performing Query: ' + err);
+		        		}
+		    		})
+		    	} else {
+		    		datalayer.committeesView(function(err, rows, fields){
+						if(!err){
+						var query=req.query.detail;
+						res.render('dashboard.ejs',{
+								user: req.user,
+								isLoggedIn: isLoggedIn,
+								data: rows,
+								menu: menu,
+								option: option,
+								detail: detail
+							});
+						} else {
+							console.log('Error while performing Query ' + err);
+						}
+					});
+		    	}
 
-	            //res.send({data: rows});
-	        } else {
-	            console.log('Error while performing Query: ' + err);
-	        }
-		 console.log(rows);
-	    })
+
+
+
+			}
+
+
+
+
+
+			else{ //default to candidate list view
+					datalayer.candidatesView(function(err, rows, fields){
+				        if(!err){
+						    res.render('dashboard.ejs',{
+								user: req.user,
+								isLoggedIn: isLoggedIn, 
+								data: rows,
+								menu: menu,
+								option: option,
+								detail: detail
+							});
+		        		} else {
+		            		console.log('Error while performing Query: ' + err);
+		        		}
+		    		})
+			}
 	})
 
 
@@ -119,7 +198,7 @@ module.exports = function(app, passport) {
 		//console.log('get committees!');
 		datalayer.committeesView(function(err, rows, fields){
 			if(!err){
-			res.render('partials/dashboard/committees', {layout:false, committees:rows, option: req.query.option});
+			res.render('partials/dashboard/committees', {layout:false, data:rows, option: req.query.option});
 			} else {
 				console.log(err);
 			}
@@ -163,7 +242,47 @@ module.exports = function(app, passport) {
 	app.get('/candidatesedit', isLoggedIn, function(req,res){
 		var data;
 		var query=req.query.option;
-		res.render('partials/dashboard/candidatesEdit', {layout:false, data:data, option:req.query.option});
+		datalayer.candidatesView(function(err, rows, fields){
+			if(!err){
+				res.render('partials/dashboard/candidatesEdit', {layout:false, data:rows, option:req.query.option, detail: req.query.detail});
+			} else {
+				console.log(err);
+			}
+		});		
+	})
+
+
+	app.get('/candidateseditdetail', isLoggedIn, function(req,res){
+		var data;
+		var query=req.query.option;
+		datalayer.candidatesViewDetail(req.query.detail, function(err, rows, fields){
+			if(!err){
+			var query=req.query.detail;
+			res.render('partials/dashboard/candidatesEditDetail', {layout:false, data:rows, option:req.query.detail});
+			console.log(rows);
+			} else {
+				console.log('Error while performing Query ' + err);
+			}
+		});	
+	})
+
+	app.post('/candidateseditdetails', isLoggedIn, function(req,res){
+		var phone = req.body.phone ? req.body.phone : '';
+		var fax = req.body.fax ? req.body.fax : '';
+		var email = req.body.email ? req.body.email : '';
+		var website = req.body.website ? req.body.website : '';
+		var youtube = req.body.youtube ? req.body.youtube : '';
+		var facebook = req.body.facebook ? req.body.facebook : '';
+		var twitter = req.body.twitter_handle ? req.body.twitter_handle : '';
+		var linkedin = req.body.linkedin ? req.body.linkedin : '';
+		var candidateid = req.body.candidateid ? req.body.candidateid : '';
+		 datalayer.updateCandidate(phone, fax, email, website, youtube, facebook, twitter, linkedin, candidateid, function(err, rows, fields){
+		 	if(!err){
+				res.redirect('/dashboard?menu=candidates&option=edit');
+		 	} else {
+		 		console.log('Error while performing Query ' + err);
+		 	}
+		 });	
 	})
 
 	app.get('/candidatesview', isLoggedIn, function(req,res){
@@ -175,17 +294,15 @@ module.exports = function(app, passport) {
 	        } else {
 	            console.log('Error while performing Query: ' + err);
 	        }
-		 console.log(rows);
 	    })
-		//res.render('partials/dashboard/candidatesView', {layout:false, data:data, option:req.query.option});
 	})
 
 	app.get('/candidatesViewDetail', isLoggedIn, function(req, res){
 		datalayer.candidatesViewDetail(req.query.detail, function(err, rows, fields){
 			if(!err){
-			var query=req.query.detail;
-			res.render('partials/dashboard/candidatesViewDetail', {layout:false, data:rows, option:req.query.detail});
-			console.log(rows);
+				var query=req.query.detail;
+				res.render('partials/dashboard/candidatesViewDetail', {layout:false, data:rows, option:req.query.detail});
+				console.log(rows);
 			} else {
 				console.log('Error while performing Query ' + err);
 			}

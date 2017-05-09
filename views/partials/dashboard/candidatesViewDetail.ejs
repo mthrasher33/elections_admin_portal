@@ -1,13 +1,40 @@
+<h3> <%=data[0][0].First %> <%=data[0][0].Last%> </h3>
 <p>Races: 
+	<ul>
 <% for(var i=0; i < data[0].length; i++) { %>
-   <span> <%= data[0][i].Date %> <%= data[0][i].Name%> </span>
+   <li><span> <%= data[0][i].Date %> <%= data[0][i].Name%> </span>
    <% if(data[0][i].City) { %>
    	 <span>  <%= data[0][i].City %> </span>
    <% } else { %>
    	 <span>  <%= data[0][i].Ward_Name %> </span>
    <% } %>
+      <% if(data[0][i].wonRace) { %>
+   	 <span>  (Won) </span>
+   <% } else { %>
+   	 <span>  (Lost) </span>
+   <% } %>
+   </li>
 <% } %>
+	</ul>
 </p>
+
+
+<p>Phone:  <%=data[0][0].Phone %> </p>
+
+<p>Fax: <%=data[0][0].Fax %> </p>
+
+<p>Email: <a href="mailto: <%=data[0][0].Email %>" target="_blank"> <%=data[0][0].Email %> </a> </p>
+
+<p>Website: <a href="<%=data[0][0].Website %>" target="_blank"> <%=data[0][0].Website %> </a> </p>
+
+<p>Youtube: <a href="<%=data[0][0].Youtube %>" target="_blank"> <%=data[0][0].Youtube %>  </a> </p>
+
+<p>Facebook: <a href="<%=data[0][0].Facebook %>" target="_blank"> <%=data[0][0].Facebook %> </a> </p>
+
+<p>Twitter: <a href="<%=data[0][0].Twitter_Handle %>" target="_blank"> <%=data[0][0].Twitter_Handle %>  </a> </p>
+
+<p>LinkedIn: <a href="<%=data[0][0].linkedIn %>" target="_blank"> <%=data[0][0].linkedIn %> </a>  </p>
+
 
 <script>
 </script>
