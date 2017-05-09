@@ -14,7 +14,8 @@ var path = require('path');
 
 var passport = require('passport');
 var flash    = require('connect-flash');
-
+var multer  = require('multer')
+var upload = multer({ dest: 'uploads/' })
 // configuration ===============================================================
 // connect to our database
 
@@ -44,6 +45,8 @@ app.use(flash()); // use connect-flash for flash messages stored in session
 
 //make paths intuitive
 app.set('views', path.join(__dirname, 'views'));
+app.use(require('stylus').middleware(path.join(__dirname, 'public')));
+
 app.use(express.static(path.join(__dirname, 'public')));
 
 // routes ======================================================================

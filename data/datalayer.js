@@ -57,8 +57,24 @@
         });        
     }
 
+    this.reportsViewDetail = function(idCandidate, callback){
+       pool.getConnection(function(err,connection){
+            connection.query('Select EXTRACT(Year from Registration_Date) as Registration_Date_Year, EXTRACT(Year from Termination_Date) As Termination_Date_Year, r.*, com.* From Reports r Join Committees com on com.idCommittee = r.idCommittee Join Candidates c on c.idCandidate = com.idCandidate Where c.idCandidate = ?;', idCandidate,  function(err, rows, fields){
+                connection.release();
+                callback(err,rows,fields);
+            });
+        });          
+    }
 
-  
+    this.updateReport = function(phone, fax, email, website, youtube, facebook, twitter, linkedin, candidateid, callback){
+        pool.getConnection(function(err,connection){
+             connection.query('call spUpdateReport(?,?,?,?,?,?,?,?,?)', [phone, fax, email, website, youtube, facebook, twitter, linkedin, candidateid],  function(err, rows, fields){
+                 connection.release();
+                 callback(err, rows,fields);
+             });
+         });           
+    }
+
 
 };
 

@@ -6,3 +6,46 @@
    </option>
 <% } %>
 </select>
+
+
+<div class="row">
+	<div class="col-xs-12">
+		<div id="reportsDetail">
+			<% if (detail) { %> 
+        		<% include ../dashboard/reportsViewDetail } %>
+        	<% } %>
+		</div>
+	</div>
+</div>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script>
+$('select#candidates').change(function(){
+	var selected = $('select#candidates option:selected').val();
+		var url = $(location).attr('href');
+       	var params = {
+			menu: 'reports',
+			option: 'view',
+			detail: selected
+
+		}
+		
+		var str = jQuery.param(params);
+			
+		//if there are no parameters, add them
+		if (url.indexOf('/') > 5){
+		 window.history.pushState("", "", url.replace(/\?.*$/, "") + "?" + jQuery.param(params))
+		} else {  //remove the existing params and add the new ones
+		 window.history.pushState("", "", url.slice(0, url.indexOf('/')) + "?" +  jQuery.param(params))
+		}
+
+		$.get("/reportsEditDetail/?detail=" + selected, function(data){	   
+			//alert('getting data');    
+	    	if(data){
+				$('#reportsDetail').html(data);
+	       	}
+	  	});
+
+})
+</script>

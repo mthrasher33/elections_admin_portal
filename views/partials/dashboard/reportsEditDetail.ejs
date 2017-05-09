@@ -1,0 +1,74 @@
+<div class="col-xs-12">
+<% if (data.length < 1) { %>
+   <p> We do not have any registered campaign finance reports for this candidate in our database.</p>
+   <ul> This might be because:
+      <li> We have not yet entered reports from this candidate's campaign committee from the <a href= "http://www16.co.hennepin.mn.us/cfrs/search.do">county website</a> into our database. </li>
+      <li> We have looked on the county website, and the it does not list any reports for this candidate either because they did not raise more than $100 or they did not register. </li>
+   </ul>
+<% } %>
+
+
+<% for(var i=0; i < data.length; i++) { %>
+<form action="/reportsEditDetails"  method="POST" role="form" onsumbit = "success()" enctype="multipart/form-data">
+   <h4> <%=data[i].Committee_Name %> <%=data[i].Report_Name %> </h4>
+   <div class="col-xs-12 col-sm-12">
+     <div class="form-group">
+       <label for="inputbeginningcashbalance">Beginning Cash Balance:</label>
+       <input type="text" class="form-control" id="inputbeginningcashbalance" name="beginningcashbalance" value="<%=data[i].Beginning_Cash_Balance %>">
+     </div>
+  </div>
+  <div class="col-xs-12 col-sm-4">
+     <div class="form-group">
+       <label for="inputadditions">Additions:</label>
+       <input type="text" class="form-control"  id="inputadditions" name="additions" value="<%=data[i].Beginning_Cash_Balance %>">
+     </div>
+  </div>
+  <div class="col-xs-12 col-sm-4">
+     <div class="form-group">
+       <label for="inputtotalitemizedcontributions">Total Itemized Contributions:</label>
+       <input type="text" class="form-control"  id="inputtotalitemizedcontributions" name="totalitemizedcontributions" value="<%=data[i].Total_Itemized_Contributions %>">
+     </div>
+  </div>
+  <div class="col-xs-12 col-sm-4">
+     <div class="form-group">
+       <label for="inputtotalnonitemizedcontributions">Total Non-Itemized Contributions:</label>
+       <input type="text" class="form-control"  id="inputtotalnonitemizedcontributions" name="totalnonitemizedcontributions" value="<%=data[i].Total_Non_Itemized_Contributions %>">
+     </div>
+  </div>  
+  <div class="col-xs-12 col-sm-6">
+     <div class="form-group">
+       <label for="inputsubtractions">Subtractions:</label>
+       <input type="text" class="form-control"  id="inputsubtractions" name="subtractions" value="<%=data[i].Subtractions %>">
+     </div>
+  </div> 
+  <div class="col-xs-12 col-sm-6">
+     <div class="form-group">
+       <label for="inputendingcashbalance">Ending Cash Balance:</label>
+       <input type="text" class="form-control"  id="inputendingcashbalance" name="endingcashbalance" value="<%=data[i].Ending_Cash_Balance %>">
+     </div>
+  </div> 
+  <div class="col-xs-12 col-sm-6">
+     <div class="form-group">
+       <label for="inputcampaignfinancereportcountylink">Campaign Finance Report County Link:</label>
+       <input type="text" class="form-control"  id="inputcampaignfinancereportcountylink" name="campaignfinancereportcountylink" value="<%=data[i].Link %>">
+     </div>
+  </div> 
+  <div class="col-xs-12 col-sm-6">
+     <div class="form-group">
+       <label for="inputmachinereadablefile">Machine Readable File:</label>
+       <input type="file" class="form-control"  id="inputmachinereadablefile" name="machinereadablefile" value="<%=data[i].Machine_Readable_File_System %> accept="application/x-zip-compressed,image/*">
+     </div>
+  </div>
+
+  <input type="hidden" id="inputidreport" name="idreport" value="<%=data[i].idReport %>">
+      
+<button type="submit" class="btn btn-primary">Submit</button>
+</form>
+
+   <hr>
+     
+<% } %>
+
+
+
+</div>

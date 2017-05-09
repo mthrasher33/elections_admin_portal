@@ -1,5 +1,17 @@
 // app/routes.js
 var datalayer = require('../data/datalayer.js');
+var multer  = require('multer')
+var storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'public/reports')
+  },
+  filename: function (req, file, cb) {
+      cb(null, file.originalname);        
+  }
+})
+
+var upload = multer({storage:storage});
+var fs = require('fs');
 
 module.exports = function(app, passport) {
 
@@ -336,9 +348,106 @@ module.exports = function(app, passport) {
 	app.get('/reports', isLoggedIn, function(req, res){
 		var data;
 		var query=req.query;
+		datalayer.candidatesView(function(err, rows, fields){
+			if(!err){
+				res.render('partials/dashboard/reports', {layout:false, data:rows, option: req.query.option, detail: req.query.detail});
+			} else {
+				console.log(err);
+			}
+		});
+	})
+
+	app.get('/reportscreate', isLoggedIn, function(req, res){
+		var data;
+		var query=req.query;
+		console.log(query);		
+		datalayer.candidatesView(function(err, rows, fields){
+			if(!err){
+		res.render('partials/dashboard/reportscreate', {layout:false, data:rows, option:req.query.option, detail: req.query.detail});
+			} else {
+				console.log(err);
+			}
+		});
+	})
+
+	app.get('/reportsview', isLoggedIn, function(req, res){
+		var data;
+		var query=req.query;
 		console.log(query);		
 		//so it finds the view when you do this
-		res.render('partials/dashboard/reports', {layout:false, data:data});
+		datalayer.candidatesView(function(err, rows, fields){
+			if(!err){
+				res.render('partials/dashboard/reportsview', {layout:false, data:rows, option:req.query.option, detail: req.query.detail});
+			} else {
+				console.log(err);
+			}
+		});
+
+	})
+
+	app.get('/reportsviewdetail', isLoggedIn, function(req, res){
+		var data;
+		var query=req.query;
+		datalayer.reportsViewDetail(req.query.detail, function(err, rows, fields){
+			if(!err){
+				var query=req.query.detail;
+				res.render('partials/dashboard/reportsViewDetail', {layout:false, data:rows, option:req.query.option, detail: req.query.detail});
+				console.log(rows);
+			} else {
+				console.log('Error while performing Query ' + err);
+			}
+		});
+	})
+
+	app.get('/reportsedit', isLoggedIn, function(req, res){
+		var data;
+		var query=req.query;
+		console.log(query);		
+		//so it finds the view when you do this
+		datalayer.candidatesView(function(err, rows, fields){
+			if(!err){
+				res.render('partials/dashboard/reportsedit', {layout:false, data:rows, option: req.query.option, detail: req.query.detail});
+			} else {
+				console.log(err);
+			}
+		});	})
+
+	app.get('/reportseditdetail', isLoggedIn, function(req, res){
+		var data;
+		var query=req.query;
+		console.log(query);		
+		//so it finds the view when you do this
+		datalayer.reportsViewDetail(req.query.detail, function(err, rows, fields){
+			if(!err){
+				var query=req.query.detail;
+				res.render('partials/dashboard/reportsEditDetail', {layout:false, data:rows, option:req.query.detail});
+				console.log(rows);
+			} else {
+				console.log('Error while performing Query ' + err);
+			}
+		});
+	})
+
+	app.post('/reportseditdetails', upload.single('machinereadablefile'), function(req,res){
+		//console.log(req.body);
+		console.log(req.file)
+		//console.log(req.body.machinereadablefile);
+		var beginningcashbalance = req.body.beginningcashbalance ? req.body.beginningcashbalance : '';
+		var additions = req.body.additions ? req.body.additions : '';
+		var totalitemizedcontributions = req.body.totalitemizedcontributions ? req.body.totalitemizedcontributions : '';
+		var totalnonitemizedcontributions = req.body.totalnonitemizedcontributions ? req.body.totalnonitemizedcontributions : '';
+		var subtractions = req.body.subtractions ? req.body.subtractions : '';
+		var endingcashbalance = req.body.endingcashbalance ? req.body.endingcashbalance : '';
+		var campaignfinancereportcountylink = req.body.campaignfinancereportcountylink ? req.body.campaignfinancereportcountylink : '';
+		var machinereadablefile = req.file.filename ? req.file.filename : '';
+		var idreport = req.body.idreport ? req.body.idreport : '';
+		 datalayer.updateReport(beginningcashbalance, additions, totalitemizedcontributions, totalnonitemizedcontributions, subtractions, endingcashbalance, campaignfinancereportcountylink, machinereadablefile, idreport, function(err, rows, fields){
+		 	if(!err){
+				res.redirect('/dashboard?menu=reports&option=edit');
+		 	} else {
+		 		console.log('Error while performing Query ' + err);
+		 	}
+		 });	
 	})
 
 	app.get('/donations', isLoggedIn, function(req, res){
@@ -348,6 +457,15 @@ module.exports = function(app, passport) {
 		//so it finds the view when you do this
 		res.render('partials/dashboard/donations', {layout:false, data:data});
 	})
+
+
+	app.get('/public/reports/:reportName', function(req, res){
+  		var filename = req.params.reportName;
+  		//console.log(__dirname)
+  		//res.attachment(filename);
+  		//res.sendFile( __dirname, 'reports/' + filename);
+
+	});
 
 	//app.get('/dashboard/candidates', isLoggedIn, function(req,res){
 //		res.render('partials/candidates');
