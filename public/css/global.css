@@ -1,11 +1,32 @@
+@import url('https://fonts.googleapis.com/css?family=Cabin|Josefin+Sans|Lora|Noto+Sans|PT+Sans');
+
+
 html {
   min-height: 100%;
   position: relative;
 }
 body {
     margin-bottom: 60px;
+font-family: 'Cabin', sans-serif;
+
 }
-ul {
+
+
+
+.jumbotron {
+  background-color: #DC3522;
+/*  color: #D9CB9E;
+*/
+  color: white;
+}
+
+nav.navbar.navbar-default, div#footer {
+  background-color: #374140;
+}
+
+h1, h2, h3, h4, h5 {
+font-family: 'Josefin Sans', sans-serif;}
+ul.submenu {
   list-style-type: none;
 }
 
@@ -18,8 +39,8 @@ ul.submenu li.active {
   font-weight: bold;
 }
 
-.rightborder {
-  border-right: 1px solid #d9d9d9;
+.leftborder {
+  border-left: 1px solid #d9d9d9;
 }
 #footer {
     bottom: 0;
@@ -33,14 +54,79 @@ ul.submenu li.active {
     }
 
 div.button.group {
-      margin: 10px auto;
     width: 100%;
+    margin-bottom:10px ;
+}
+
+p.footer-block a {
+  color: #777;
+}
+
+a {
+    color: #777;
+
+}
+
+a:hover, a:active {
+  text-decoration: none;
+  color: #d9d9d9;
+}
+
+button.btn {
+  background-color: #2A2C2B;
+  color: #d9d9d9;
 }
 
 .btn.active {
-  color: #d9d9d9;
+  background-color: #d9d9d9;
+  color: #2A2C2B;
 }
 
 select#candidates {
   margin-bottom:15px;
+}
+
+span.missing {
+  color: #DC3522;
+}
+
+span.obtained, span.obtained a {
+  color: green;
+}
+div.candidateDetail, div.committeeDetail, div.reportDetail{
+  background-color: white;
+  border: 2px solid #D9CB9E;
+
+  padding: 20px;
+  border-radius: 10px;
+  color: #374140;
+
+  margin-bottom: 25px;
+
+}
+div.candidateDetail span.fa{
+  margin-right: 10px;
+  width: 15px;
+}
+
+div.candidateDetail span {
+  line-height: 3;
+}
+
+span.number {
+
+
+}
+
+select#candidates, div.button.group {
+  width: 225px;
+/*  margin: 10px auto;
+*/}
+
+select#candidates {
+  margin-bottom: 25px;
+}
+
+button#missing {
+  margin-top:10px;
 }

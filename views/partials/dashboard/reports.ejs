@@ -1,10 +1,9 @@
-
 <div class="row">
-		<div class ="col-xs-4 col-xs-offset-4">
+		<div class ="col-xs-12">
 			<div class="button group">
-				<button id="view" class="btn btn-warning btn-lg">View</button>
-				<button id="create" class="btn btn-primary btn-lg">Create</button>
-				<button id = "edit" class="btn btn-success btn-lg">Edit</button>
+				<button id="view" class="btn active btn-lg">View</button>
+				<button id="create" class="btn btn-lg">Create</button>
+				<button id = "edit" class="btn btn-lg">Edit</button>
 			</div>
 		</div>
 </div>
@@ -27,6 +26,15 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
 <script>
+	setActiveButton();
+
+	function setActiveButton(){
+		var active = <%= option %>
+		$('button.btn.btn-lg').removeClass('active')
+		$(active).addClass('active');
+
+	}
+	
 	$('div.button.group button').click(function(){
 		var url = $(location).attr('href');
  		var clicked = event.target.id;

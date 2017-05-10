@@ -75,6 +75,15 @@
          });           
     }
 
+    this.getMissingReport = function(idCandidate, callback){
+        pool.getConnection(function(err,connection){
+            connection.query('Select * From Reports r Join Committees com On com.idCommittee = r.idCommittee Join Candidates c On c.idCandidate = com.idCandidate where c.idCandidate = ? Order By r.Report_Date ASC', idCandidate, function(err,rows,fields){
+                connection.release();
+                callback(err,rows,fields);
+            })
+        })
+    }
+
 
 };
 

@@ -1,4 +1,5 @@
 <div class="col-xs-12">
+<div class="reportDetail">
 <% if (data.length < 1) { %>
    <p> We do not have any registered campaign finance reports for this candidate in our database.</p>
    <ul> This might be because:
@@ -27,11 +28,79 @@
    <% } %>
          </p> 
 
+   <% if (data[i+1]) { %>      
+      <hr>
+   <% } else { %>
+            <button id="missing" class=" btn btn-lg">Print Report</button>
 
-   <hr>
-     
+     <% } %>
+
 <% } %>
 
 
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script>
+var dataG;
+   
+   $('button#missing').click(function(){
+      $.get("/missingreports/?idCandidate=" + <%=detail %>, function(data){     
+         //alert('getting data');    
+         if(data){
+            var html = "";
+            html += "Report for all committees registered to: " + data.data[0].First + ' ' + data.data[0].Last + "<br><br>";
+
+            for (var report in data.data){
+
+               var repYear = data.data[report].Report_Date.split('-')[0];
+               var regYear = data.data[report].Registration_Date.split('-')[0];
+               console.log(data.data[report])
+               if(repYear > regYear && html.indexOf(data.data[report].Committee_Name) < 1 ){
+                  var loopReg = regYear;
+                  var loopRep = repYear;
+                  do {
+                     html += data.data[report].Committee_Name + " missing: " + loopReg + " Annual Report (and all other information from this year) <br><br>";
+                     loopReg++;
+                  } while(loopReg < loopRep);
+               } else { //we have the report!
+
+                  html += data.data[report].Committee_Name + " obtained: " + data.data[report].Report_Name;
+                  if(data.data[report].Link){
+                     html += ", <a href= \"data.data[report].Link\" target=\"_blank\">available on county website</a>";
+                  } else {
+                     html += ", no report on county website";
+                  }
+
+                  if(data.data[report].Machine_Readable_File_System){
+                     html += ", we have a machine readable report in the file system (data.data[report].Machine_Readable_File_System)"
+                  } else {
+                     html += ", no machine readable file in our file system"
+                  }
+
+                  if(data.data[report].Non_Itemized_Contributions_Provided){
+                     html += ", we have non-itemized contribution information for this report."
+
+                  } else {
+                     html += ", we do not have non-itemized contribution information for this report."
+
+                  }
+
+
+                  html+= "<br><br>";
+               }  
+            }
+
+            var w = window.open();
+            dataG = data;
+            w.document.open();
+            w.document.write(html);
+            w.document.close();
+            //$(w.document.body).html(html);
+           console.log(data);
+            }
+      });
+   })
+</script>
 
 </div>

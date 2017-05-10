@@ -467,6 +467,17 @@ module.exports = function(app, passport) {
 
 	});
 
+	app.get('/missingreports', function(req, res){
+		var idCandidate = req.query.idCandidate;
+		 datalayer.getMissingReport(idCandidate, function(err, rows, fields){
+		 	if(!err){
+				res.send({data: rows});
+		 	} else {
+		 		console.log('Error while performing Query ' + err);
+		 	}
+		 });	
+	})
+
 	//app.get('/dashboard/candidates', isLoggedIn, function(req,res){
 //		res.render('partials/candidates');
 	//});

@@ -1,4 +1,6 @@
+
 <div class="col-xs-12">
+<div class="committeeDetail">
 <% if (data.length < 1) { %>
    <p> We do not have a registered campaign committee for this candidate in our database.</p>
    <ul> Here are the possibilities:
@@ -9,6 +11,7 @@
 
 <% for(var i=0; i < data.length; i++) { %>
    <h3> <%=data[i].Committee_Name %> </h3>
+   <hr>
    <p> Year registered: <%=data[i].Registration_Date_Year %> </p>
     <% if ( data[i].Termination_Date_Year > 0) { %>
       <p> Year closed: <%=data[i].Termination_Date_Year%> </p>
@@ -22,6 +25,6 @@
    <p> Disctrict Number: <%=data[i].District_Num %></p>        
 <% } %>
 
-
+</div>
 
 </div>
