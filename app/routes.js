@@ -413,7 +413,7 @@ module.exports = function(app, passport) {
 
 	app.post('/reportseditdetails', upload.single('machinereadablefile'), function(req,res){
 		//console.log(req.body);
-		console.log(req.file)
+		//console.log(req.file)
 		//console.log(req.body.machinereadablefile);
 		var beginningcashbalance = req.body.beginningcashbalance ? req.body.beginningcashbalance : '';
 		var additions = req.body.additions ? req.body.additions : '';
@@ -422,7 +422,7 @@ module.exports = function(app, passport) {
 		var subtractions = req.body.subtractions ? req.body.subtractions : '';
 		var endingcashbalance = req.body.endingcashbalance ? req.body.endingcashbalance : '';
 		var campaignfinancereportcountylink = req.body.campaignfinancereportcountylink ? req.body.campaignfinancereportcountylink : '';
-		var machinereadablefile = req.file.filename ? req.file.filename : '';
+		var machinereadablefile = req.file ? req.file.filename : '';
 		var idreport = req.body.idreport ? req.body.idreport : '';
 		 datalayer.updateReport(beginningcashbalance, additions, totalitemizedcontributions, totalnonitemizedcontributions, subtractions, endingcashbalance, campaignfinancereportcountylink, machinereadablefile, idreport, function(err, rows, fields){
 		 	if(!err){
