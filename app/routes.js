@@ -43,7 +43,6 @@ module.exports = function(app, passport) {
             failureFlash : true // allow flash messages
 		}),
         function(req, res) {
-            console.log("hello");
 
             if (req.body.remember) {
               req.session.cookie.maxAge = 1000 * 60 * 3;
@@ -96,13 +95,6 @@ module.exports = function(app, passport) {
 		var option = req.query.option ? req.query.option : '';
 		var detail = req.query.detail ? req.query.detail : 0;
 
-		// console.log('menu:');
-		// console.log(menu);
-
-		// console.log('option:');
-		// console.log(option);
-		// console.log('detail:');
-		// console.log(detail);
 
 		var isLoggedIn = false;
 		if (req.isAuthenticated()){isLoggedIn = true};
@@ -119,7 +111,6 @@ module.exports = function(app, passport) {
 								option: option,
 								detail: detail
 							});
-							console.log(data);
 		        		} else {
 		            		console.log('Error while performing Query: ' + err);
 		        		}
@@ -207,7 +198,6 @@ module.exports = function(app, passport) {
 	app.get('/committees', isLoggedIn, function(req, res){
 		var data;
 		var query=req.query;
-		//console.log('get committees!');
 		datalayer.candidatesView(function(err, rows, fields){
 			if(!err){
 				res.render('partials/dashboard/committees', {layout:false, data:rows, option: req.query.option, detail: req.query.detail});
@@ -221,7 +211,6 @@ module.exports = function(app, passport) {
 	app.get('/committeescreate', isLoggedIn, function(req, res){
 		var data;
 		var query=req.query;
-		console.log(query);
 		res.render('partials/dashboard/committeesCreate', {layout:false, data:data});
 	})
 	app.get('/committeesEdit', isLoggedIn, function(req, res){
@@ -245,7 +234,6 @@ module.exports = function(app, passport) {
 			if(!err){
 				var query=req.query.detail; 
 				res.render('partials/dashboard/committeesViewDetail', {layout:false, data:rows, option:req.query.detail});
-				console.log(rows.length);
 			} else {
 				console.log('Error while performing Query ' + err);
 			}
@@ -256,8 +244,6 @@ module.exports = function(app, passport) {
 	app.get('/candidates', isLoggedIn, function(req, res){
 		var data;
 		var query=req.query;
-		console.log(query);
-		//console.log(query);
 		//so it finds the view when you do this
 		datalayer.candidatesView(function(err, rows, fields){
 			if(!err){
@@ -289,7 +275,6 @@ module.exports = function(app, passport) {
 			if(!err){
 			var query=req.query.detail;
 			res.render('partials/dashboard/candidatesEditDetail', {layout:false, data:rows, option:req.query.detail});
-			console.log(rows);
 			} else {
 				console.log('Error while performing Query ' + err);
 			}
@@ -332,7 +317,6 @@ module.exports = function(app, passport) {
 			if(!err){
 				var query=req.query.detail;
 				res.render('partials/dashboard/candidatesViewDetail', {layout:false, data:rows, option:req.query.detail});
-				console.log(rows);
 			} else {
 				console.log('Error while performing Query ' + err);
 			}
@@ -360,10 +344,9 @@ module.exports = function(app, passport) {
 	app.get('/reportscreate', isLoggedIn, function(req, res){
 		var data;
 		var query=req.query;
-		console.log(query);		
 		datalayer.candidatesView(function(err, rows, fields){
 			if(!err){
-		res.render('partials/dashboard/reportscreate', {layout:false, data:rows, option:req.query.option, detail: req.query.detail});
+		res.render('partials/dashboard/reportsCreate', {layout:false, data:rows, option:req.query.option, detail: req.query.detail});
 			} else {
 				console.log(err);
 			}
@@ -373,11 +356,10 @@ module.exports = function(app, passport) {
 	app.get('/reportsview', isLoggedIn, function(req, res){
 		var data;
 		var query=req.query;
-		console.log(query);		
 		//so it finds the view when you do this
 		datalayer.candidatesView(function(err, rows, fields){
 			if(!err){
-				res.render('partials/dashboard/reportsview', {layout:false, data:rows, option:req.query.option, detail: req.query.detail});
+				res.render('partials/dashboard/reportsView', {layout:false, data:rows, option:req.query.option, detail: req.query.detail});
 			} else {
 				console.log(err);
 			}
@@ -392,7 +374,6 @@ module.exports = function(app, passport) {
 			if(!err){
 				var query=req.query.detail;
 				res.render('partials/dashboard/reportsViewDetail', {layout:false, data:rows, option:req.query.option, detail: req.query.detail});
-				console.log(rows);
 			} else {
 				console.log('Error while performing Query ' + err);
 			}
@@ -402,15 +383,17 @@ module.exports = function(app, passport) {
 	app.get('/reportsedit', isLoggedIn, function(req, res){
 		var data;
 		var query=req.query;
-		console.log(query);		
+		console.log(query);
+		//res.redirect('/dashboard?menu=reports&option=edit')		
 		//so it finds the view when you do this
-		datalayer.candidatesView(function(err, rows, fields){
-			if(!err){
-				res.render('partials/dashboard/reportsedit', {layout:false, data:rows, option: req.query.option, detail: req.query.detail});
-			} else {
-				console.log(err);
-			}
-		});	})
+		 datalayer.candidatesView(function(err, rows, fields){
+		 	if(!err){
+		 		res.render('partials/dashboard/reportsEdit', {layout:false, data:rows, option: req.query.option, detail: req.query.detail});
+		 	} else {
+		 		console.log(err);
+		 	}
+		});	
+	})
 
 	app.get('/reportseditdetail', isLoggedIn, function(req, res){
 		var data;
